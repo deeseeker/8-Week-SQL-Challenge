@@ -116,7 +116,7 @@ SELECT COUNT(pizza_id)
 FROM customer_orders c
 JOIN runner_order r
 ON r.order_id = c.order_id
-WHERE (exclusions != NULL AND extras != NULL) AND cancellation_alt = NULL
+WHERE (exclusions is not NULL AND extras is not NULL) AND cancellation_alt is not NULL
 
 --Q9: What was the total volume of pizzas ordered for each hour of the day?
 SELECT DATE_PART('hour',order_time) hour_of_the_day, COUNT(order_id) pizza_vol

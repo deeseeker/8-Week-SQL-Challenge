@@ -100,15 +100,15 @@ FROM pizza_cte
 --Q7: For each customer, how many delivered pizzas had at least 1 change and how many had no changes?  
 SELECT c.customer_id,
 SUM(CASE 
-	WHEN c.exclusions <> '' or c.extras <> '' THEN 1
+	WHEN c.exclusions IS NOT NULL or c.extras IS NOT NULL THEN 1
 	ELSE 0 END)AS at_least_1_change,
 SUM(CASE 
-	WHEN c.exclusions = '' AND  c.extras = '' THEN 1
+	WHEN c.exclusions is NULL AND  c.extras is NULL THEN 1
 	ELSE 0 END) AS no_change
 FROM customer_orders c
 JOIN runner_order r
 ON r.order_id = c.order_id
-WHERE cancellation_alt = ''
+WHERE cancellation_alt is NULL
 GROUP BY 1
 ORDER BY 1
 --Q8: How many pizzas were delivered that had both exclusions and extras?
@@ -116,7 +116,7 @@ SELECT COUNT(pizza_id)
 FROM customer_orders c
 JOIN runner_order r
 ON r.order_id = c.order_id
-WHERE (exclusions != '' AND extras != '') AND cancellation_alt = ''
+WHERE (exclusions != NULL AND extras != NULL) AND cancellation_alt = NULL
 
 --Q9: What was the total volume of pizzas ordered for each hour of the day?
 SELECT DATE_PART('hour',order_time) hour_of_the_day, COUNT(order_id) pizza_vol

@@ -123,9 +123,18 @@ SELECT DATE_PART('hour',order_time) hour_of_the_day, COUNT(order_id) pizza_vol
 FROM customer_orders c
 GROUP BY DATE_PART('hour',order_time);
 --Q10: What was the volume of orders for each day of the week?
-SELECT extract(isodow from order_time) day_of_the_week, COUNT(order_id) pizza_vol
-FROM customer_orders
-GROUP BY 1
+SELECT 
+	CASE WHEN dow = 6 THEN 'Saturday'
+		 WHEN dow = 5 THEN 'Friday'
+		 WHEN dow = 4 THEN 'Thursday'
+		 WHEN dow = 3 THEN 'Wednesday' END AS day_of_week, t1.pizza_vol pizza_volume
+FROM(SELECT extract(isodow from order_time) dow, COUNT(order_id) pizza_vol
+	FROM customer_orders
+	GROUP BY 1) t1
+ORDER BY 2 DESC;
+
+
+
 
 
 
